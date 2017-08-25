@@ -59,16 +59,12 @@ The script will create a list of evaluated resources in a csv file (default is `
 
 A sample csv file will look like this:
 
-| title | publish | resource | extent | date| language | repository | creator | scope | restrictions
-|---|---|---|---|---|---|---|---|---|---|
-| #resource title | TRUE | #resourceId | 20.8 | inclusive|  eng   | #NameofRepository | FALSE | #scopenote| #accessrestriction
-| #resource title | TRUE | #resourceId | 50.6 | single   |  FALSE | #NameofRepository | #creator | FALSE| FALSE
+| title | publish | resource | level | extent | date| language | repository | creation_date | creator | aw_subjects | abstract | bioghist | scope | restrictions | ead_id | ead_location | finding_aid_title | finding_aid_author | finding_aid_date | finding_aid_description_rules | finding_aid_filing_title | finding_aid_language
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| #resource title | TRUE | #resourceId | collection | 20.8 | creation|  eng   | #NameofRepository | 2008 | FALSE | #subjects | #abstract | #bioghistnote | #scopenote | #accessrestriction
+| #resource title | TRUE | #resourceId | collection | 50.6 | FALSE   |  FALSE | #NameofRepository | 2012 | #creator | FALSE | FALSE | FALSE | FALSE | FALSE
 
 If you are using Microsoft Excel to view the csv file, consult the following links to avoid encoding issues: [Excel 2007](https://www.itg.ias.edu/content/how-import-csv-file-uses-utf-8-character-encoding-0), [Excel 2013](https://www.itg.ias.edu/node/985).
-
-## Contributing
-
-Pull requests accepted!
 
 ## Authors
 
