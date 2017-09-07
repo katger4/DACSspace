@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import os, requests, json, ConfigParser, csv
+import os, requests, json, ConfigParser
+import unicodecsv
 from codecs import encode
 
 config = ConfigParser.ConfigParser()
@@ -119,15 +120,12 @@ def makeRow(resource):
 		row.append("false")
 
 	# add archives west browsing terms if exist (need at least one)
-	# for ref in subjects:
-	# 	print resourceURL+ref
-	# 	#print requests.get(resourceURL + ref, headers=headers).json()
 	source_list = [requests.get('http://localhost:8089' + ref).json()['source'] for ref in subjects]
-	if 'Archives West Browsing Terms' in source_list:
+	if 'archiveswest' in source_list:
 		sub_list = []
 		for ref in subjects:
 			subject = requests.get(resourceURL + ref, headers=headers).json()
-			if subject['source'] == 'Archives West Browsing Terms':
+			if subject['source'] == 'archiveswest':
 				sub_list.append(subject['title'])
 		row.append(", ".join(sub_list).encode('utf-8'))
 	else:
@@ -145,7 +143,12 @@ def makeRow(resource):
 			row.append(item)
 		else:
 			row.append("false")	
-	
+
+	# encode strings as utf-8
+	for s in row:
+		if type(s) is str:
+			s.decode('utf-8').strip().encode('utf-8')
+
 	print "Writing resource ", resource_id,"..."	
 
 def main():
@@ -161,8 +164,9 @@ def main():
 	resourceIds = requests.get(repositoryBaseURL + "/resources?all_ids=true", headers=headers)
 	
 	#Creating csv
-	writer = csv.writer(open(spreadsheet, "wb"))
-	column_headings = ["title", "publish", "resource", "level", "extent", "date", "language", "repository", "creation_date", "creator", "aw_subjects", "abstract", "bioghist", "scope", "restrictions", 'ead_id', 'ead_location', 'finding_aid_title', 'finding_aid_author', 'finding_aid_date', 'finding_aid_description_rules', 'finding_aid_filing_title', 'finding_aid_language']
+	file = open(spreadsheet, "wb")
+	writer = unicodecsv.writer(file, encoding='utf-8')
+	column_headings = ["title", "publish", "resource", "level", "extent", "language", "repository", "creation_date", "creator", "aw_subjects", "abstract", "bioghist", "scope", "restrictions", 'ead_id', 'ead_location', 'finding_aid_title', 'finding_aid_author', 'finding_aid_date', 'finding_aid_description_rules', 'finding_aid_filing_title', 'finding_aid_language']
 	writer.writerow(column_headings)
 
 	#Checking ALL resources
